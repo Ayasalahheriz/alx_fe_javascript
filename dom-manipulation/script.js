@@ -77,5 +77,14 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
       populateCategories();
       alert('Quotes imported successfully!');
     };
-    fileReader.readAsText(event.ta
+    fileReader.readAsText(event.target.files[0]);
+  }
+  
+  // Function to get filtered quotes based on the selected category
+  function getFilteredQuotes() {
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    if (categoryFilter === 'all') {
+      return quotes;
+    }
+    return quotes.filter(quote => quote.category ===
   
