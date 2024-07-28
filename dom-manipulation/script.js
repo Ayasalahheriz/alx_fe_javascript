@@ -7,14 +7,17 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
   document.getElementById('newQuote').addEventListener('click', showRandomQuote);
   document.addEventListener('DOMContentLoaded', () => {
     loadQuotes();
+    populateCategories();
     document.getElementById('exportQuotes').addEventListener('click', exportQuotes);
     document.getElementById('importFile').addEventListener('change', importFromJsonFile);
+    restoreLastFilter();
   });
   
   // Function to display a random quote
   function showRandomQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const quote = quotes[randomIndex];
+    const filteredQuotes = getFilteredQuotes();
+    const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+    const quote = filteredQuotes[randomIndex];
     document.getElementById('quoteDisplay').innerHTML = `<p>${quote.text}</p>`;
     sessionStorage.setItem('lastQuote', JSON.stringify(quote));
   }
@@ -29,6 +32,7 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
       document.getElementById('newQuoteCategory').value = '';
       document.getElementById('quoteDisplay').innerHTML = `<p>New quote added: ${newQuoteText}</p>`;
       saveQuotes();
+      populateCategories();
     } else {
       document.getElementById('quoteDisplay').innerHTML = `<p>Please enter both a quote and a category.</p>`;
     }
@@ -70,8 +74,8 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
       const importedQuotes = JSON.parse(event.target.result);
       quotes.push(...importedQuotes);
       saveQuotes();
+      populateCategories();
       alert('Quotes imported successfully!');
     };
-    fileReader.readAsText(event.target.files[0]);
-  }
+    fileReader.readAsText(event.ta
   
