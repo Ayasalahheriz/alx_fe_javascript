@@ -19,6 +19,9 @@ const quotes = [
       quotes.push({ text: newQuoteText, category: newQuoteCategory });
       document.getElementById('newQuoteText').value = '';
       document.getElementById('newQuoteCategory').value = '';
+      alert('Quote added successfully!');
+    } else {
+      alert('Please enter both a quote and a category.');
     }
   }
   
