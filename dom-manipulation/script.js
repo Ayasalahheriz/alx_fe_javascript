@@ -104,10 +104,13 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
   
   // Function to filter quotes based on the selected category
   function filterQuotes() {
-    const filteredQuotes = getFilteredQuotes();
+    const selectedCategory = document.getElementById('categoryFilter').value; // Get the selected category
+    const filteredQuotes = quotes.filter(quote => quote.category === selectedCategory);
+  
     if (filteredQuotes.length > 0) {
       const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-      const quote = filteredQuotes[randomIndex];
+      const   
+   quote = filteredQuotes[randomIndex];
       document.getElementById('quoteDisplay').innerHTML = `<p>${quote.text}</p>`;
     } else {
       document.getElementById('quoteDisplay').innerHTML = `<p>No quotes available for the selected category.</p>`;
