@@ -17,22 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(syncWithServer, 60000); // Sync every 60 seconds
 });
 
-// Function to fetch quotes from the server and sync with local storage
-async function syncWithServer() {
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
   try {
     const response = await fetch(API_URL);
     const serverData = await response.json();
     
-    // Simulate conflict resolution: Server data takes precedence
-    const serverQuotes = serverData.map(item => ({ text: item.title, category: 'Unknown' }));
-    if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
-      quotes = serverQuotes;
-      saveQuotes();
-      populateCategories();
-      alert('Data synced with server. Local data has been updated.');
-    }
+    // Simulate extracting quote data from server response
+    return serverData.map(item => ({ text: item.title, category: 'Unknown' }));
   } catch (error) {
-    console.error('Error syncing with server:', error);
+    console.error('Error fetching quotes from server:', error);
+    return []; // Return empty array on error
+  }
+}
+
+// Function to sync local quotes with server data
+async function syncWithServer() {
+  const serverQuotes = await fetchQuotesFromServer();
+  
+  if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
+    quotes = serverQuotes;
+    saveQuotes();
+    populateCategories();
+    alert('Data synced with server. Local data has been updated.');
   }
 }
 
