@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   restoreLastFilter();
   
   // Start periodic sync
-  setInterval(syncWithServer, 60000); // Sync every 60 seconds
+  setInterval(syncQuotes, 60000); // Sync every 60 seconds
 });
 
 // Function to fetch quotes from the server
@@ -31,19 +31,7 @@ async function fetchQuotesFromServer() {
   }
 }
 
-// Function to sync local quotes with server data
-async function syncWithServer() {
-  const serverQuotes = await fetchQuotesFromServer();
-  
-  if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
-    quotes = serverQuotes;
-    saveQuotes();
-    populateCategories();
-    alert('Data synced with server. Local data has been updated.');
-  }
-}
-
-// Function to send updated quotes to the server
+// Function to post quotes to the server
 async function postQuotesToServer() {
   try {
     const response = await fetch(API_URL, {
@@ -62,6 +50,25 @@ async function postQuotesToServer() {
     console.log('Quotes successfully posted to server:', responseData);
   } catch (error) {
     console.error('Error posting quotes to server:', error);
+  }
+}
+
+// Function to sync quotes with the server
+async function syncQuotes() {
+  const serverQuotes = await fetchQuotesFromServer();
+  
+  if (serverQuotes.length > 0) {
+    const localQuotesStr = JSON.stringify(quotes);
+    const serverQuotesStr = JSON.stringify(serverQuotes);
+
+    if (localQuotesStr !== serverQuotesStr) {
+      // Data conflict detected
+      console.log('Data conflict detected. Updating local quotes.');
+      quotes = serverQuotes;
+      saveQuotes();
+      populateCategories();
+      alert('Data synced with server. Local data has been updated.');
+    }
   }
 }
 
