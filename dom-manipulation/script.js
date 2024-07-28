@@ -67,7 +67,7 @@ async function syncQuotes() {
       quotes = serverQuotes;
       saveQuotes();
       populateCategories();
-      alert('Data synced with server. Local data has been updated.');
+      alert('Quotes synced with server! Local data has been updated.'); // Notify user
     }
   }
 }
