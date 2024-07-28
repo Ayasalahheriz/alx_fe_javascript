@@ -86,5 +86,47 @@ const quotes = JSON.parse(localStorage.getItem('quotes')) || [
     if (categoryFilter === 'all') {
       return quotes;
     }
-    return quotes.filter(quote => quote.category ===
+    return quotes.filter(quote => quote.category === categoryFilter);
+  }
+  
+  // Function to populate the category dropdown
+  function populateCategories() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    const categories = [...new Set(quotes.map(quote => quote.category))];
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option); // Here's the appendChild
+    });
+  }
+  
+  // Function to filter quotes based on the selected category
+  function filterQuotes() {
+    const filteredQuotes = getFilteredQuotes();
+    if (filteredQuotes.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+      const quote = filteredQuotes[randomIndex];
+      document.getElementById('quoteDisplay').innerHTML = `<p>${quote.text}</p>`;
+    } else {
+      document.getElementById('quoteDisplay').innerHTML = `<p>No quotes available for the selected category.</p>`;
+    }
+    saveLastFilter();
+  }
+  
+  // Function to save the last selected filter to local storage
+  function saveLastFilter() {
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    localStorage.setItem('lastCategoryFilter', categoryFilter);
+  }
+  
+  // Function to restore the last selected filter from local storage
+  function restoreLastFilter() {
+    const lastCategoryFilter = localStorage.getItem('lastCategoryFilter');
+    if (lastCategoryFilter) {
+      document.getElementById('categoryFilter').value = lastCategoryFilter;
+      filterQuotes();
+    }
+  }
   
